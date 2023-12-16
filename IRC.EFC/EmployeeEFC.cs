@@ -46,12 +46,16 @@ namespace IRC.EFC
 
         public async Task UpdateEmployeeAsync(Models.Employee employee, int id)
         {
-            if (await CheckExistAsync(id))
-            {
-                var existingEmployee = await GetEmployeeByIdAsync(id);
-                Context.Employee.Attach(existingEmployee);
-                await Context.SaveChangesAsync();
-            }
+            var existingEmployee = await Context.Employee.FirstOrDefaultAsync(x => x.EmployeeId == id);
+
+            if (existingEmployee == null)
+                return;
+
+            existingEmployee.Name = employee.Name;
+            existingEmployee.Department = employee.Department;
+
+
+            await Context.SaveChangesAsync();
         }
     }
 }

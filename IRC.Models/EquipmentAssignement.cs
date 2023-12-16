@@ -21,5 +21,9 @@ namespace IRC.Models
         public Equipment Equipment { get; set; }
         public Employee Employee { get; set; }
         public Room Room { get; set; }
+        public override string ToString()
+        {
+            return $"{EquipmentAssignementId},{EquipmentId}, {EmployeeId},{RoomId},{DateBorrowed}";
+        }
     }
 }

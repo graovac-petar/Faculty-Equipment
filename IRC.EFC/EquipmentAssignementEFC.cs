@@ -36,7 +36,12 @@ namespace IRC.EFC
 
         public async Task<List<Models.EquipmentAssignement>> GetAllEquipmentAssignementsAsync()
         {
-            return await Context.EquipmentAssignement.ToListAsync();
+            var assignments = Context.EquipmentAssignement
+                .Include(e => e.Room)
+                .Include(e => e.Equipment)
+                .Include(e => e.Employee)
+                .ToList();
+            return assignments;
         }
 
         public async Task<Models.EquipmentAssignement?> GetEquipmentAssignementByIdAsync(int id)

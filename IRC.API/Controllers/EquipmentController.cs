@@ -13,43 +13,47 @@ namespace IRC.API.Controllers
         public ILogger<EquipmentController> Logger { get; }
         public EquipmentEFC EquipmentEFC { get; }
 
-
         public EquipmentController(ILogger<EquipmentController> logger, EquipmentEFC equipmentEFC)
         {
             Logger = logger;
             EquipmentEFC = equipmentEFC;
         }
-        // GET: api/<ValuesController>
+
         [HttpGet]
-        public Task<List<Equipment>> GetEquipment()
+        public async Task<List<Equipment>> GetEquipment()
         {
-            Logger.LogInformation("INFO");
-            throw new NotImplementedException();
+            Logger.LogInformation($"Called {nameof(EquipmentEFC)}");
+            return await EquipmentEFC.GetAllEquipmentsAsync();
         }
 
-        // GET api/<ValuesController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<string> GetAsync(int id)
         {
-            return "value";
+            Equipment? equipment = await EquipmentEFC.GetEquipmentByIdAsync(id);
+
+            return equipment.ToString();
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task PostAsync([FromBody] Equipment equipment)
         {
+            Logger.LogInformation($"Called {nameof(EquipmentEFC)}");
+            await EquipmentEFC.AddEquipmentAsync(equipment);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task PutAsync(int id, [FromBody] Equipment equipment)
         {
+            await EquipmentEFC.UpdateEquipmentAsync(equipment, id);
         }
 
         // DELETE api/<ValuesController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task DeleteAsync(int id)
         {
+            await EquipmentEFC.DeleteEquipmentAsync(id);
         }
     }
 }

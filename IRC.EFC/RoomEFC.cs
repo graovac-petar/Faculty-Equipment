@@ -46,12 +46,15 @@ namespace IRC.EFC
 
         public async Task UpdateRoomAsync(Models.Room Room, int id)
         {
-            if (await CheckExistAsync(id))
-            {
-                var existingRoom = await GetRoomByIdAsync(id);
-                Context.Room.Attach(existingRoom);
-                await Context.SaveChangesAsync();
-            }
+            var existingRoom = await Context.Room.FirstOrDefaultAsync(x => x.RoomId == id);
+
+            if (existingRoom == null)
+                return;
+
+            existingRoom.RoomNumber = Room.RoomNumber;
+
+
+            await Context.SaveChangesAsync();
         }
     }
 }

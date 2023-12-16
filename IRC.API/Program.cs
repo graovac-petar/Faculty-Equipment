@@ -1,5 +1,7 @@
 using IRC.EFC;
 using IRC.EFC.Interfaces;
+using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,10 +13,17 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddTransient<DBContext>();
 
-builder.Services.AddSingleton<IEmployeeEFC, EmployeeEFC>();
-builder.Services.AddSingleton<IEquipmentEFC, EquipmentEFC>();
-builder.Services.AddSingleton<EquipmentEFC>();
+builder.Services.AddScoped<IEmployeeEFC, EmployeeEFC>();
+builder.Services.AddScoped<IEquipmentEFC, EquipmentEFC>();
+builder.Services.AddScoped<EmployeeEFC>();
+builder.Services.AddScoped<EquipmentEFC>();
+builder.Services.AddScoped<RoomEFC>();
+builder.Services.AddScoped<EquipmentAssignementEFC>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddDbContext<DBContext>(opt =>
+    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

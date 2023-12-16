@@ -1,25 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using IRC.Models;
 
-namespace IRC.Models
+namespace IRC.DTOs.Equipment
 {
-    public class Equipment
+    public class GetEquipmentDTO
     {
-        public const string TableName = "Equipment";
-        [Key]
         public int EquipmentId { get; set; }
-
-        [Required]
         public string Name { get; set; }
-        [Required]
         public string SerialNumber { get; set; }
-        [Required]
         public string InventoryNumber { get; set; }
 
         public int? Quantity { get; set; }
 
         public EquipmentType? Type { get; set; }
 
-        public List<EquipmentAssignement> Assignments { get; set; } = new();
         public override string ToString()
         {
             return $"{EquipmentId}, {Name}, {SerialNumber}, {InventoryNumber}, {Quantity}";

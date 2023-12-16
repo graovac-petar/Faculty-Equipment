@@ -9,6 +9,10 @@ namespace IRC.Models
 
         [Required]
         public string RoomNumber { get; set; }
-        public ICollection<EquipmentAssignement> EquipmentAssignments { get; set; }
+        public List<EquipmentAssignement> EquipmentAssignments { get; set; } = new();
+        public override string ToString()
+        {
+            return $"{RoomNumber}";
+        }
     }
 }

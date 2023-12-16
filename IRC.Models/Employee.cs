@@ -10,6 +10,11 @@ namespace IRC.Models
         [Required]
         public string Name { get; set; }
         public string? Department { get; set; }
-        public List<EquipmentAssignement> AssignedEquipment { get; set; }
+        public List<EquipmentAssignement> AssignedEquipment { get; set; } = new();
+        public override string ToString()
+        {
+            return $"{EmployeeId}, {Name}, {Department} ";
+        }
+
     }
 }

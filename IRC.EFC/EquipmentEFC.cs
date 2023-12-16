@@ -46,12 +46,18 @@ namespace IRC.EFC
 
         public async Task UpdateEquipmentAsync(Models.Equipment Equipment, int id)
         {
-            if (await CheckExistAsync(id))
-            {
-                var existingEquipment = await GetEquipmentByIdAsync(id);
-                Context.Equipment.Attach(existingEquipment);
-                await Context.SaveChangesAsync();
-            }
+            var existingEquipment = await Context.Equipment.FirstOrDefaultAsync(x => x.EquipmentId == id);
+
+            if (existingEquipment == null)
+                return;
+
+            existingEquipment.Name = Equipment.Name;
+            existingEquipment.SerialNumber = Equipment.SerialNumber;
+            existingEquipment.InventoryNumber = Equipment.InventoryNumber;
+            existingEquipment.Quantity = Equipment.Quantity;
+            existingEquipment.Type = Equipment.Type;
+
+            await Context.SaveChangesAsync();
         }
     }
 }
