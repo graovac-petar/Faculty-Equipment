@@ -14,11 +14,8 @@ namespace IRC.Models
         public string SerialNumber { get; set; }
         [Required]
         public string InventoryNumber { get; set; }
-
         public int? Quantity { get; set; }
-
         public EquipmentType? Type { get; set; }
-
         public List<EquipmentAssignement> Assignments { get; set; } = new();
         public override string ToString()
         {

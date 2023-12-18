@@ -8,8 +8,9 @@ namespace IRC.API.Mapper
     {
         public EmployeeMapper()
         {
-            CreateMap<Employee, GetEmployeeDTO>()
-                .ReverseMap();
+            CreateMap<Employee, GetEmployeeDTO>().ReverseMap();
+            CreateMap<Employee, UpdateEmployeeDTO>().ReverseMap();
+            CreateMap<Employee, CreateEmployeeDTO>().ReverseMap();
         }
     }
 }

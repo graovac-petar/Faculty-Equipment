@@ -1,8 +1,7 @@
 ﻿namespace IRC.DTOs.Employee
 {
-    public class GetEmployeeDTO
+    public class UpdateEmployeeDTO
     {
-        public int? EmployeeId { get; set; }
         public string? Name { get; set; }
         public string? Department { get; set; }
     }

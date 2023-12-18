@@ -1,4 +1,6 @@
-﻿using IRC.EFC;
+﻿using AutoMapper;
+using IRC.DTOs.Room;
+using IRC.EFC;
 using IRC.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,41 +12,45 @@ namespace IRC.API.Controllers
     {
         public ILogger<RoomController> Logger { get; }
         public RoomEFC RoomEFC { get; }
+        public IMapper Mapper { get; }
 
-        public RoomController(ILogger<RoomController> logger, RoomEFC RoomEFC)
+        public RoomController(ILogger<RoomController> logger, RoomEFC RoomEFC, IMapper mapper)
         {
             Logger = logger;
             this.RoomEFC = RoomEFC;
+            Mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<Room>> GetRoom()
+        public async Task<List<GetRoomDTO>> GetRoom()
         {
             Logger.LogInformation($"Called {nameof(RoomEFC)}");
-            return await RoomEFC.GetAllRoomsAsync();
+            var Mapped = await RoomEFC.GetAllRoomsAsync();
+            return Mapper.Map<List<GetRoomDTO>>(Mapped);
         }
 
         [HttpGet("{id}")]
-        public async Task<string> GetAsync(int id)
+        public async Task<GetRoomDTO> GetAsync(int id)
         {
             Room? Room = await RoomEFC.GetRoomByIdAsync(id);
-
-            return Room.ToString();
+            return Mapper.Map<GetRoomDTO>(Room);
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task PostAsync([FromBody] Room Room)
+        public async Task PostAsync([FromBody] CreateRoomDTO Room)
         {
             Logger.LogInformation($"Called {nameof(RoomEFC)}");
-            await RoomEFC.AddRoomAsync(Room);
+            var Mapped = Mapper.Map<Room>(Room);
+            await RoomEFC.AddRoomAsync(Mapped);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] Room Room)
+        public async Task PutAsync(int id, [FromBody] UpdateRoomDTO Room)
         {
-            await RoomEFC.UpdateRoomAsync(Room, id);
+            var Mapped = Mapper.Map<Room>(Room);
+            await RoomEFC.UpdateRoomAsync(Mapped, id);
         }
 
         // DELETE api/<ValuesController>/5

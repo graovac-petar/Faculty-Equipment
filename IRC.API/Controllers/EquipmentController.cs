@@ -1,4 +1,6 @@
-﻿using IRC.EFC;
+﻿using AutoMapper;
+using IRC.DTOs.Equipment;
+using IRC.EFC;
 using IRC.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,41 +14,45 @@ namespace IRC.API.Controllers
     {
         public ILogger<EquipmentController> Logger { get; }
         public EquipmentEFC EquipmentEFC { get; }
+        public IMapper Mapper { get; }
 
-        public EquipmentController(ILogger<EquipmentController> logger, EquipmentEFC equipmentEFC)
+        public EquipmentController(ILogger<EquipmentController> logger, EquipmentEFC equipmentEFC, IMapper mapper)
         {
             Logger = logger;
             EquipmentEFC = equipmentEFC;
+            Mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<List<Equipment>> GetEquipment()
+        public async Task<List<GetEquipmentDTO>> GetEquipment()
         {
             Logger.LogInformation($"Called {nameof(EquipmentEFC)}");
-            return await EquipmentEFC.GetAllEquipmentsAsync();
+            var Equipments = await EquipmentEFC.GetAllEquipmentsAsync();
+            return Mapper.Map<List<GetEquipmentDTO>>(Equipments);
         }
 
         [HttpGet("{id}")]
-        public async Task<string> GetAsync(int id)
+        public async Task<GetEquipmentDTO> GetAsync(int id)
         {
-            Equipment? equipment = await EquipmentEFC.GetEquipmentByIdAsync(id);
-
-            return equipment.ToString();
+            Equipment? Equipment = await EquipmentEFC.GetEquipmentByIdAsync(id);
+            return Mapper.Map<GetEquipmentDTO>(Equipment);
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task PostAsync([FromBody] Equipment equipment)
+        public async Task PostAsync([FromBody] CreateEquipmentDTO Equipment)
         {
             Logger.LogInformation($"Called {nameof(EquipmentEFC)}");
-            await EquipmentEFC.AddEquipmentAsync(equipment);
+            var Mapped = Mapper.Map<Equipment>(Equipment);
+            await EquipmentEFC.AddEquipmentAsync(Mapped);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] Equipment equipment)
+        public async Task PutAsync(int id, [FromBody] UpdateEquipmentDTO Equipment)
         {
-            await EquipmentEFC.UpdateEquipmentAsync(equipment, id);
+            var Mapped = Mapper.Map<Equipment>(Equipment);
+            await EquipmentEFC.UpdateEquipmentAsync(Mapped, id);
         }
 
         // DELETE api/<ValuesController>/5

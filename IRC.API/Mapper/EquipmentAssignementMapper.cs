@@ -9,6 +9,8 @@ namespace IRC.API.Mapper
         public EquipmentAssignementMapper()
         {
             CreateMap<EquipmentAssignement, GetEquipmentAssignementDTO>().ReverseMap();
+            CreateMap<EquipmentAssignement, UpdateEquipmentAssignementDTO>().ReverseMap();
+            CreateMap<EquipmentAssignement, CreateEquipmentAssignementDTO>().ReverseMap();
         }
     }
 }

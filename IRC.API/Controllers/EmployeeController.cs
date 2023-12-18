@@ -32,26 +32,27 @@ namespace IRC.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<string> GetAsync(int id)
+        public async Task<GetEmployeeDTO> GetAsync(int id)
         {
             Employee? Employee = await EmployeeEFC.GetEmployeeByIdAsync(id);
-
-            return Employee.ToString();
+            return Mapper.Map<GetEmployeeDTO>(Employee);
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task PostAsync([FromBody] Employee Employee)
+        public async Task PostAsync([FromBody] CreateEmployeeDTO Employee)
         {
             Logger.LogInformation($"Called {nameof(EmployeeEFC)}");
-            await EmployeeEFC.AddEmployeeAsync(Employee);
+            var Mapped = Mapper.Map<Employee>(Employee);
+            await EmployeeEFC.AddEmployeeAsync(Mapped);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] Employee Employee)
+        public async Task PutAsync(int id, [FromBody] UpdateEmployeeDTO Employee)
         {
-            await EmployeeEFC.UpdateEmployeeAsync(Employee, id);
+            var Mapped = Mapper.Map<Employee>(Employee);
+            await EmployeeEFC.UpdateEmployeeAsync(Mapped, id);
         }
 
         // DELETE api/<ValuesController>/5

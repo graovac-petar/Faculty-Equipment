@@ -27,30 +27,33 @@ namespace IRC.API.Controllers
         public async Task<List<GetEquipmentAssignementDTO>> GetEquipmentAssignement()
         {
             var ass = await EquipmentAssignementEFC.GetAllEquipmentAssignementsAsync();
-            return Mapper.Map<List<GetEquipmentAssignementDTO>>(ass);
+            var Mapr = Mapper.Map<List<GetEquipmentAssignementDTO>>(ass);
+            return Mapr;
         }
 
         [HttpGet("{id}")]
-        public async Task<string> GetAsync(int id)
+        public async Task<GetEquipmentAssignementDTO> GetAsync(int id)
         {
             EquipmentAssignement? EquipmentAssignement = await EquipmentAssignementEFC.GetEquipmentAssignementByIdAsync(id);
 
-            return EquipmentAssignement.ToString();
+            return Mapper.Map<GetEquipmentAssignementDTO>(EquipmentAssignement);
         }
 
         // POST api/<ValuesController>
         [HttpPost]
-        public async Task PostAsync([FromBody] EquipmentAssignement EquipmentAssignement)
+        public async Task PostAsync([FromBody] CreateEquipmentAssignementDTO EquipmentAssignement)
         {
             Logger.LogInformation($"Called {nameof(EquipmentAssignementEFC)}");
-            await EquipmentAssignementEFC.AddEquipmentAssignementAsync(EquipmentAssignement);
+            var Map = Mapper.Map<EquipmentAssignement>(EquipmentAssignement);
+            await EquipmentAssignementEFC.AddEquipmentAssignementAsync(Map);
         }
 
         // PUT api/<ValuesController>/5
         [HttpPut("{id}")]
-        public async Task PutAsync(int id, [FromBody] EquipmentAssignement EquipmentAssignement)
+        public async Task PutAsync(int id, [FromBody] UpdateEquipmentAssignementDTO EquipmentAssignement)
         {
-            await EquipmentAssignementEFC.UpdateEquipmentAssignementAsync(EquipmentAssignement, id);
+            var Map = Mapper.Map<EquipmentAssignement>(EquipmentAssignement);
+            await EquipmentAssignementEFC.UpdateEquipmentAssignementAsync(Map, id);
         }
 
         // DELETE api/<ValuesController>/5

@@ -8,8 +8,9 @@ namespace IRC.API.Mapper
     {
         public EquipmenteMapper()
         {
-            CreateMap<Equipment, GetEquipmentDTO>()
-                .ReverseMap();
+            CreateMap<Equipment, GetEquipmentDTO>().ReverseMap();
+            CreateMap<Equipment, UpdateEquipmentDTO>().ReverseMap();
+            CreateMap<Equipment, CreateEquipmentDTO>().ReverseMap();
         }
     }
 }

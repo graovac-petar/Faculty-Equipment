@@ -1,4 +1,5 @@
 ﻿using IRC.EFC.Interfaces;
+using IRC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace IRC.EFC
@@ -36,8 +37,7 @@ namespace IRC.EFC
 
         public async Task<List<Models.EquipmentAssignement>> GetAllEquipmentAssignementsAsync()
         {
-            var assignments = Context.EquipmentAssignement
-                .Include(e => e.Room)
+            var assignments = Context.EquipmentAssignement.Include(e => e.Room)
                 .Include(e => e.Equipment)
                 .Include(e => e.Employee)
                 .ToList();
@@ -46,17 +46,24 @@ namespace IRC.EFC
 
         public async Task<Models.EquipmentAssignement?> GetEquipmentAssignementByIdAsync(int id)
         {
-            return await Context.EquipmentAssignement.FirstOrDefaultAsync(x => x.EquipmentAssignementId == id);
+            return await Context.EquipmentAssignement.Include(e => e.Room)
+                .Include(e => e.Equipment)
+                .Include(e => e.Employee).FirstOrDefaultAsync(x => x.EquipmentAssignementId == id);
         }
 
         public async Task UpdateEquipmentAssignementAsync(Models.EquipmentAssignement EquipmentAssignement, int id)
         {
-            if (await CheckExistAsync(id))
-            {
-                var existingEquipmentAssignement = await GetEquipmentAssignementByIdAsync(id);
-                Context.EquipmentAssignement.Attach(existingEquipmentAssignement);
-                await Context.SaveChangesAsync();
-            }
+            var existingEquipment = await Context.EquipmentAssignement.FirstOrDefaultAsync(x => x.EquipmentAssignementId == id);
+
+            if (existingEquipment == null)
+                return;
+
+            existingEquipment.EquipmentId = EquipmentAssignement.EquipmentId;
+            existingEquipment.EmployeeId = EquipmentAssignement.EmployeeId;
+            existingEquipment.RoomId = EquipmentAssignement.RoomId;
+            existingEquipment.DateBorrowed = EquipmentAssignement.DateBorrowed;
+
+            await Context.SaveChangesAsync();
         }
     }
 }

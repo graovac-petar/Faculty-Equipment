@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using IRC.DTOs.Room;
+using IRC.Models;
 
 namespace IRC.API.Mapper
 {
@@ -7,7 +8,9 @@ namespace IRC.API.Mapper
     {
         public RoomMapper()
         {
-            CreateMap<RoomMapper, GetRoomDTO>().ReverseMap();
+            CreateMap<Room, GetRoomDTO>().ReverseMap();
+            CreateMap<Room, UpdateRoomDTO>().ReverseMap();
+            CreateMap<Room, CreateRoomDTO>().ReverseMap();
         }
     }
 }
