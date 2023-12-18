@@ -1,8 +1,8 @@
+using FluentValidation;
 using IRC.EFC;
 using IRC.EFC.Interfaces;
+using IRC.Validate;
 using Microsoft.EntityFrameworkCore;
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -20,6 +20,10 @@ builder.Services.AddScoped<EquipmentEFC>();
 builder.Services.AddScoped<RoomEFC>();
 builder.Services.AddScoped<EquipmentAssignementEFC>();
 
+builder.Services.AddValidatorsFromAssembly(typeof(EmployeeValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(RoomValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(EquipmentValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(EquipmentAssignementValidator).Assembly);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddDbContext<DBContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
