@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRC.EFC.Interfaces", "IRC.E
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRC.DTOs", "IRC.DTOs\IRC.DTOs.csproj", "{5FEC28BE-8A79-44B6-B373-98E4615AEF83}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IRC.Blazor", "IRC.Blazor\IRC.Blazor.csproj", "{B03D2ADE-DE77-40A6-9F34-D7BA25912E3B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{5FEC28BE-8A79-44B6-B373-98E4615AEF83}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5FEC28BE-8A79-44B6-B373-98E4615AEF83}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5FEC28BE-8A79-44B6-B373-98E4615AEF83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B03D2ADE-DE77-40A6-9F34-D7BA25912E3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B03D2ADE-DE77-40A6-9F34-D7BA25912E3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B03D2ADE-DE77-40A6-9F34-D7BA25912E3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B03D2ADE-DE77-40A6-9F34-D7BA25912E3B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -10,7 +10,6 @@ namespace IRC.Models
         public int EquipmentAssignementId { get; set; }
 
         [ForeignKey("Equipment")]
-
         public int EquipmentId { get; set; }
 
         [ForeignKey("Employee")]

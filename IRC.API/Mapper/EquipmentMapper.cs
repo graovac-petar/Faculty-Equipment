@@ -11,6 +11,7 @@ namespace IRC.API.Mapper
             CreateMap<Equipment, GetEquipmentDTO>().ReverseMap();
             CreateMap<Equipment, UpdateEquipmentDTO>().ReverseMap();
             CreateMap<Equipment, CreateEquipmentDTO>().ReverseMap();
+            CreateMap<GetEquipmentDTO, CreateEquipmentDTO>().ReverseMap();
         }
     }
 }

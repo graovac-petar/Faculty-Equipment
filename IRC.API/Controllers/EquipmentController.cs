@@ -23,7 +23,7 @@ namespace IRC.API.Controllers
             Mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("all")]
         public async Task<List<GetEquipmentDTO>> GetEquipment()
         {
             Logger.LogInformation($"Called {nameof(EquipmentEFC)}");

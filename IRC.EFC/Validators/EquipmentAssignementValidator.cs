@@ -16,7 +16,9 @@ namespace IRC.EFC.Validators
 
             RuleFor(ea => ea.EquipmentId)
                 .NotEmpty().WithMessage("Equipment ID is required")
-                .MustAsync(BeValidEquipment).WithMessage("Equipment does not exist.");
+                .MustAsync(BeValidEquipment).WithMessage("Equipment does not exist.")
+                .Must(BeUniqueEquipmentId)
+            .WithMessage("Equipment Id must be unique in Equipment Assignment table.");
 
             RuleFor(ea => ea.RoomId)
                 .NotEmpty().WithMessage("Room ID is required")
@@ -42,6 +44,10 @@ namespace IRC.EFC.Validators
         private async Task<bool> BeValidRoom(int roomId, CancellationToken cancellationToken)
         {
             return await Context.Room.AnyAsync(r => r.RoomId == roomId, cancellationToken);
+        }
+        private bool BeUniqueEquipmentId(int equipmentId)
+        {
+            return !Context.EquipmentAssignement.Any(e => e.EquipmentId == equipmentId);
         }
     }
 }

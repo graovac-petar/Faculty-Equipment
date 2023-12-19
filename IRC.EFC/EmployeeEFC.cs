@@ -31,7 +31,6 @@ namespace IRC.EFC
                 Context.Employee.Remove(employee);
                 await Context.SaveChangesAsync();
             }
-
         }
 
         public async Task<List<Models.Employee>> GetAllEmployeesAsync()

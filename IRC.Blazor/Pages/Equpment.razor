@@ -1,0 +1,58 @@
+﻿@page "/Equipment/all"
+@inject IEquipmentService EquipmentService
+@inject NavigationManager NavigationManager
+
+
+<PageTitle>Equipment</PageTitle>
+<h2>Equipment</h2>
+@if (getEquipmentDTOs == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>SerialNumber</th>
+                <th>InventoryNumber</th>
+                <th>Quantity</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var equipment in EquipmentService.Equipments)
+            {
+                <tr>
+                    <td>@equipment.Name</td>
+                    <td>@equipment.SerialNumber</td>
+                    <td>@equipment.InventoryNumber</td>
+                    <td>@equipment.Quantity</td>
+                    <td>@equipment.Type</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(() => ShowEquipment(equipment.EquipmentId))"><i class="oi oi-pencil">Edit</i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-primary" @onclick="CreateNewEquipment">Create New Equipment</button>
+}
+
+@code {
+    List<GetEquipmentDTO> getEquipmentDTOs;
+    protected override async Task OnInitializedAsync()
+    {
+        await EquipmentService.GetEquipments();
+        getEquipmentDTOs = EquipmentService.Equipments;
+    }
+    void ShowEquipment(int? Id)
+    {
+        NavigationManager.NavigateTo($"Equipment/{Id}");
+    }
+    void CreateNewEquipment()
+    {
+        NavigationManager.NavigateTo("Equipment");
+    }
+}

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using IRC.DTOs.Employee;
 using IRC.EFC;
+using IRC.EFC.Validators;
 using IRC.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,19 +16,21 @@ namespace IRC.API.Controllers
         public ILogger<EmployeeController> Logger { get; }
         public EmployeeEFC EmployeeEFC { get; }
         public IMapper Mapper { get; }
+        public EmployeeValidator EmployeeValidator { get; }
 
-        public EmployeeController(ILogger<EmployeeController> logger, EmployeeEFC EmployeeEFC, IMapper mapper)
+        public EmployeeController(ILogger<EmployeeController> logger, EmployeeEFC EmployeeEFC, IMapper mapper, EmployeeValidator employeeValidator)
         {
             Logger = logger;
             this.EmployeeEFC = EmployeeEFC;
             Mapper = mapper;
+            EmployeeValidator = employeeValidator;
         }
 
         [HttpGet]
         public async Task<List<GetEmployeeDTO>> GetEmployee()
         {
-            Logger.LogInformation($"Called {nameof(EmployeeEFC)}");
             var employees = await EmployeeEFC.GetAllEmployeesAsync();
+
             return Mapper.Map<List<GetEmployeeDTO>>(employees);
         }
 
