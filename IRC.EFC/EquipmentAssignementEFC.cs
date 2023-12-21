@@ -1,4 +1,5 @@
-﻿using IRC.EFC.Interfaces;
+﻿using IRC.DTOs.Filter;
+using IRC.EFC.Interfaces;
 using IRC.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,6 +65,49 @@ namespace IRC.EFC
             existingEquipment.DateBorrowed = EquipmentAssignement.DateBorrowed;
 
             await Context.SaveChangesAsync();
+        }
+
+        public IQueryable? Search(FilterRequestDTO model)
+        {
+            var filterQuery = Context.EquipmentAssignement.AsQueryable();
+
+
+            if (model.Filters.Any())
+            {
+                var room = model.Filters
+                    .FirstOrDefault(f => f.Name == "Room");
+
+                if (room != null && Int32.Parse(room.Value) != -1)
+                {
+                    filterQuery = filterQuery.Where(ea => ea.RoomId == Int32.Parse(room.Value));
+                }
+
+                var employee = model.Filters
+                    .FirstOrDefault(f => f.Name == "Employee");
+
+                if (employee != null && Int32.Parse(employee.Value) != -1)
+                {
+                    filterQuery = filterQuery.Where(ea => ea.EmployeeId == Int32.Parse(employee.Value));
+                }
+
+                var equipmentType = model.Filters
+                    .FirstOrDefault(f => f.Name == "EquipmentType");
+
+                if (equipmentType != null && Int32.Parse(equipmentType.Value) != -1)
+                {
+                    filterQuery = filterQuery.Where(ea => (int)ea.Equipment.Type == Int32.Parse(equipmentType.Value));
+                }
+
+                var department = model.Filters
+                    .FirstOrDefault(f => f.Name == "Department");
+
+                if (department != null && department.Value != "")
+                {
+                    filterQuery = filterQuery.Where(ea => ea.Employee.Department == department.Value);
+                }
+
+            }
+            return filterQuery;
         }
     }
 }

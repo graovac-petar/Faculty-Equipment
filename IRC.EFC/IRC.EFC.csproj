@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\IRC.DTOs\IRC.DTOs.csproj" />
     <ProjectReference Include="..\IRC.EFC.Interfaces\IRC.EFC.Interfaces.csproj" />
     <ProjectReference Include="..\IRC.Models\IRC.Models.csproj" />
   </ItemGroup>

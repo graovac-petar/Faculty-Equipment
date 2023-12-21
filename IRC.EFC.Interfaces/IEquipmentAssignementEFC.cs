@@ -1,5 +1,6 @@
 ﻿using IRC.Models;
 
+
 namespace IRC.EFC.Interfaces
 {
     public interface IEquipmentAssignementEFC

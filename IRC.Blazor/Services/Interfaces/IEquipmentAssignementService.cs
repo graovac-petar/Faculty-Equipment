@@ -1,5 +1,6 @@
 ﻿using IRC.DTOs.Employee;
 using IRC.DTOs.EquipmentAssaignement;
+using IRC.DTOs.Filter;
 using IRC.DTOs.Room;
 
 namespace IRC.Blazor.Services.Interfaces
@@ -9,13 +10,11 @@ namespace IRC.Blazor.Services.Interfaces
         List<GetEquipmentAssignementDTO> EquipmentAssignements { get; set; }
         List<GetRoomDTO> Rooms { get; set; }
         List<GetEmployeeDTO> Employees { get; set; }
-        Task GetEquipmentAssignement();
         Task GetEmployee();
         Task GetRooms();
-        Task<GetEmployeeDTO> GetSingleEmployee();
-        Task<GetRoomDTO> GetSingleRoom();
         Task CreateEquipmentAssignement(CreateEquipmentAssignementDTO createEquipmentAssignement);
-
+        Task GetEquipmentAssignements();
+        Task Filter(FilterRequestDTO filterRequest);
 
     }
 }

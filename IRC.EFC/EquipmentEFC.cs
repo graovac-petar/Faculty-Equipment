@@ -23,14 +23,16 @@ namespace IRC.EFC
             return await Context.Equipment.AnyAsync(x => x.EquipmentId == id);
         }
 
-        public async Task DeleteEquipmentAsync(int id)
+        public async Task<bool> DeleteEquipmentAsync(int id)
         {
             if (await CheckExistAsync(id))
             {
                 var Equipment = await GetEquipmentByIdAsync(id);
                 Context.Equipment.Remove(Equipment);
                 await Context.SaveChangesAsync();
+                return true;
             }
+            return false;
 
         }
 

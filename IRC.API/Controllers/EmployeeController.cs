@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using IRC.DTOs.Employee;
-using IRC.EFC;
+using IRC.EFC.Interfaces;
 using IRC.EFC.Validators;
 using IRC.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +14,11 @@ namespace IRC.API.Controllers
     public class EmployeeController : ControllerBase
     {
         public ILogger<EmployeeController> Logger { get; }
-        public EmployeeEFC EmployeeEFC { get; }
+        public IEmployeeEFC EmployeeEFC { get; }
         public IMapper Mapper { get; }
         public EmployeeValidator EmployeeValidator { get; }
 
-        public EmployeeController(ILogger<EmployeeController> logger, EmployeeEFC EmployeeEFC, IMapper mapper, EmployeeValidator employeeValidator)
+        public EmployeeController(ILogger<EmployeeController> logger, IEmployeeEFC EmployeeEFC, IMapper mapper, EmployeeValidator employeeValidator)
         {
             Logger = logger;
             this.EmployeeEFC = EmployeeEFC;

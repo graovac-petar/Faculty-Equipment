@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
+    <PackageReference Include="FluentValidation" Version="11.8.1" />
     <PackageReference Include="Microsoft.AspNet.Cors" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.0" PrivateAssets="all" />
@@ -15,10 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\IRC.DTOs\IRC.DTOs.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Pages\Model\" />
   </ItemGroup>
 
 </Project>

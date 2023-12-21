@@ -35,7 +35,12 @@ namespace IRC.EFC
 
         public async Task<List<Models.Employee>> GetAllEmployeesAsync()
         {
-            return await Context.Employee.ToListAsync();
+            var uniqueEmployee = await Context.Employee
+                                   .GroupBy(room => room.Name)
+                                   .Select(group => group.First())
+                                   .ToListAsync();
+
+            return uniqueEmployee;
         }
 
         public async Task<Models.Employee?> GetEmployeeByIdAsync(int id)

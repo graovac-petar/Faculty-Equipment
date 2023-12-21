@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Filter\NewFile1.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\IRC.Models\IRC.Models.csproj" />
   </ItemGroup>
 

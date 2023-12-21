@@ -1,5 +1,7 @@
-﻿using IRC.Blazor.Services.Interfaces;
+﻿using IRC.Blazor.ModelValidator;
+using IRC.Blazor.Services.Interfaces;
 using IRC.DTOs.Equipment;
+using IRC.Models;
 using Microsoft.AspNetCore.Components;
 using System.Net.Http.Json;
 
@@ -21,6 +23,7 @@ namespace IRC.Blazor.Services
         {
             var result = await _httpClient.PostAsJsonAsync("Equipment", createEquipmentDTO);
             //var response = await result.Content.ReadFromJsonAsync<List<GetEquipmentDTO>>();
+            await Task.Delay(700);
             navigationManager.NavigateTo("Equipment/all");
 
         }
@@ -38,6 +41,23 @@ namespace IRC.Blazor.Services
                 return result;
             throw new Exception();
         }
+        public async Task<EquipmentF> GetEquipmentF(int id)
+        {
+            var result = await _httpClient.GetFromJsonAsync<GetEquipmentDTO>($"Equipment/{id}");
+            if (result != null)
+            {
+                EquipmentF? equipmentF = new EquipmentF();
+                equipmentF.SerialNumber = result.SerialNumber;
+                equipmentF.Name = result.Name;
+                equipmentF.Quantity = result.Quantity;
+                equipmentF.InventoryNumber = result.InventoryNumber;
+                equipmentF.Type = (EquipmentType)result.Type;
+                return equipmentF;
+            }
+
+
+            throw new Exception();
+        }
 
         public async Task GetEquipments()
         {
@@ -51,6 +71,7 @@ namespace IRC.Blazor.Services
         public async Task UpdateEquipment(UpdateEquipmentDTO updateEquipmentDTO, int id)
         {
             var result = await _httpClient.PutAsJsonAsync($"Equipment/{id}", updateEquipmentDTO);
+            await Task.Delay(700);
             navigationManager.NavigateTo("Equipment/all");
         }
     }

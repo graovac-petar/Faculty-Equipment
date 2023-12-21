@@ -1,6 +1,8 @@
 ﻿@page "/Equipment"
 @page "/Equipment/{id:int}"
+@using IRC.Blazor.ModelValidator
 @using IRC.Models
+@using Blazored.FluentValidation
 @inject IEquipmentService EquipmentService
 
 @if (Id == null)
@@ -13,26 +15,32 @@ else
     <PageTitle>Edit @equipment.Name</PageTitle>
     <h3>Edit @equipment.Name</h3>
 }
-<EditForm Model="equipment" OnSubmit="HandleSubmit">
+<EditForm Model="@equipment" OnValidSubmit="@SubmitValidForm">
+    <FluentValidationValidator/>
+    <ValidationSummary/>
     <div>
         <label for="name">Name</label>
-        <InputText id="name" @bind-Value="equipment.Name" class="form-control"></InputText>
+        <InputText id="name" @bind-Value="@equipment.Name" class="form-control"></InputText>
+        <ValidationMessage For="@(()=>equipment.Name)"/>
     </div>
     <div>
         <label for="serialnumber">Serial Number</label>
-        <InputText id="serialnumber" @bind-Value="equipment.SerialNumber" class="form-control"></InputText>
+        <InputText id="serialnumber" @bind-Value="@equipment.SerialNumber" class="form-control"></InputText>
+        <ValidationMessage For="@(()=>equipment.SerialNumber)" />
     </div>
      <div>
         <label for="inventorynumber">Inventory Number</label>
-        <InputText id="inventorynumber" @bind-Value="equipment.InventoryNumber" class="form-control"></InputText>
+        <InputText id="inventorynumber" @bind-Value="@equipment.InventoryNumber" class="form-control"></InputText>
+        <ValidationMessage For="@(()=>equipment.InventoryNumber)" />
     </div>
     <div>
         <label for="quantity">Quantity</label>
-        <InputNumber id="quantity" @bind-Value="equipment.Quantity" class="form-control"></InputNumber>
+        <InputNumber id="quantity" @bind-Value="@equipment.Quantity" class="form-control"></InputNumber>
+        <ValidationMessage For="@(()=>equipment.Quantity)" />
     </div>
     <div>
         <label for="type">Type</label>
-        <InputSelect id="type" @bind-Value="equipment.Type" class="form-select">
+        <InputSelect id="type" @bind-Value="@equipment.Type" class="form-select">
             @foreach (var value in Enum.GetValues(typeof(EquipmentType)))
             {
                 <option value="@value" selected="@((EquipmentType)value == equipment.Type)">
@@ -45,7 +53,8 @@ else
     <br />
     <button type="submit" class="btn btn-primary">@btnText</button>
     <button type="button" class="btn btn-danger" @onclick="DeleteEquipment">Delete Equipment</button>
-
+    <br />
+    <Label>@message</Label>
 </EditForm>
 
 @code {
@@ -53,8 +62,9 @@ else
     public int? Id { get; set; }
 
     string btnText = string.Empty;
+    string message = "";
 
-    GetEquipmentDTO equipment = new GetEquipmentDTO();
+    EquipmentF equipment = new EquipmentF();
     CreateEquipmentDTO createEquipment = new CreateEquipmentDTO();
     UpdateEquipmentDTO updateEquipment = new UpdateEquipmentDTO();
 
@@ -72,14 +82,15 @@ else
         }
         else
         {
-            equipment = await EquipmentService.GetEquipment((int) Id);
-            
+            equipment = await EquipmentService.GetEquipmentF((int) Id);
+
         }
     }
-    async Task HandleSubmit()
+    async Task SubmitValidForm()
     {
         if (Id == null)
         {
+            message = "Created Successfully !";
             createEquipment.Name = equipment.Name;
             createEquipment.InventoryNumber = equipment.InventoryNumber;
             createEquipment.Quantity = equipment.Quantity;
@@ -89,6 +100,7 @@ else
         }
         else
         {
+            message = "Updated Successfully...";
             updateEquipment.Name = equipment.Name;
             updateEquipment.InventoryNumber = equipment.InventoryNumber;
             updateEquipment.Quantity = equipment.Quantity;

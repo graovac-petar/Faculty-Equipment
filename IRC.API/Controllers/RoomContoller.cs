@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using IRC.DTOs.Room;
-using IRC.EFC;
+using IRC.EFC.Interfaces;
 using IRC.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +11,10 @@ namespace IRC.API.Controllers
     public class RoomController : ControllerBase
     {
         public ILogger<RoomController> Logger { get; }
-        public RoomEFC RoomEFC { get; }
+        public IRoomEFC RoomEFC { get; }
         public IMapper Mapper { get; }
 
-        public RoomController(ILogger<RoomController> logger, RoomEFC RoomEFC, IMapper mapper)
+        public RoomController(ILogger<RoomController> logger, IRoomEFC RoomEFC, IMapper mapper)
         {
             Logger = logger;
             this.RoomEFC = RoomEFC;

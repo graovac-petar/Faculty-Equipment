@@ -36,7 +36,12 @@ namespace IRC.EFC
 
         public async Task<List<Models.Room>> GetAllRoomsAsync()
         {
-            return await Context.Room.ToListAsync();
+            var uniqueRooms = await Context.Room
+                                   .GroupBy(room => room.RoomNumber)
+                                   .Select(group => group.First())
+                                   .ToListAsync();
+
+            return uniqueRooms;
         }
 
         public async Task<Models.Room?> GetRoomByIdAsync(int id)

@@ -1,4 +1,5 @@
-﻿using IRC.DTOs.Equipment;
+﻿using IRC.Blazor.ModelValidator;
+using IRC.DTOs.Equipment;
 
 namespace IRC.Blazor.Services.Interfaces
 {
@@ -7,6 +8,7 @@ namespace IRC.Blazor.Services.Interfaces
         List<GetEquipmentDTO> Equipments { get; set; }
         Task GetEquipments();
         Task<GetEquipmentDTO> GetEquipment(int id);
+        Task<EquipmentF> GetEquipmentF(int id);
         Task CreateEquipment(CreateEquipmentDTO createEquipmentDTO);
         Task DeleteEquipment(int id);
         Task UpdateEquipment(UpdateEquipmentDTO updateEquipmentDTO, int id);

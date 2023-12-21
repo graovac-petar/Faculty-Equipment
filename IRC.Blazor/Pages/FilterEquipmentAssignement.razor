@@ -1,0 +1,123 @@
+﻿@page "/EquipmentAssignements"
+@using IRC.DTOs.EquipmentAssaignement
+@using IRC.DTOs.Filter
+@using IRC.Models
+@using System.Diagnostics
+
+@inject IEquipmentService EquipmentService
+@inject IEquipmentAssignementService EquipmentAssignementService
+@inject NavigationManager NavigationManager
+
+<PageTitle>EquipmentAssignement</PageTitle>
+<h2>Equipment Assignement</h2>
+
+@if (getEquipmentAssignementDTOs == null)
+{
+    <p>Loading ...</p>
+}
+else
+{
+
+        <div>
+            <label>Filter by Employee:</label><br />
+        <InputSelect @bind-Value="selectedEmployeeId" class="form-select">
+            <option value="-1" selected>Select an Employee</option>
+                @foreach (var eas in EquipmentAssignementService.Employees)
+                {
+                    <option value="@eas.EmployeeId">@eas.Name</option>
+                }
+            </InputSelect>
+            <label>Filter by Room</label><br />
+            <InputSelect @bind-Value="selectedRoomId" class="form-select">
+            <option value="-1" selected>Select a Room</option>
+                @foreach (var eas in EquipmentAssignementService.Rooms)
+                {
+                    <option value="@eas.RoomId" >@eas.RoomNumber</option>
+                }
+            </InputSelect>
+        </div>
+    <div>
+        <label for="type">Filter by Equipment Type</label>
+        <InputSelect id="type" @bind-Value="equipmentType" class="form-select">
+            <option value="-1" selected="">Select a Equipment Type</option>
+            @foreach (var value in Enum.GetValues(typeof(EquipmentType)))
+            {
+                <option value="@((int)value)">
+                    @value.ToString()
+                </option>
+            }
+        </InputSelect>
+        <label>Search by Department Name:</label><br />
+        <InputText @bind-Value="searchDeparatment" class="form-control" />
+    </div>
+    <br />
+    <button type="button" class="btn btn-secondary" @onclick="HandleSelection">Filter</button>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Equipment Name</th>
+                <th>Employee Name</th>
+                <th>Room Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var equipmentAssignement in getEquipmentAssignementDTOs)
+            {
+                <tr>
+                    <td>@equipmentAssignement.Equipment.Name</td>
+                    <td>@equipmentAssignement.Employee.Name</td>
+                    <td>@equipmentAssignement.Room.RoomNumber</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    int selectedRoomId { get; set; } = -1;
+    int selectedEmployeeId { get; set; } = -1;
+    int equipmentType { get; set; } = -1;
+    string searchDeparatment { get; set; } = "";
+
+    List<GetEquipmentAssignementDTO> getEquipmentAssignementDTOs;
+    protected override async Task OnInitializedAsync()
+    {
+        await EquipmentAssignementService.GetEquipmentAssignements();
+        getEquipmentAssignementDTOs = EquipmentAssignementService.EquipmentAssignements;
+        await EquipmentAssignementService.GetEmployee();
+        await EquipmentAssignementService.GetRooms();
+    }
+
+
+    public async void HandleSelection()
+    {
+        FilterRequestDTO filterRequest = new FilterRequestDTO();
+        filterRequest.Filters = new List<FilterDTO>
+        {
+            new FilterDTO
+            {
+                Name="Room",
+                Value=selectedRoomId.ToString()
+            },
+            new FilterDTO
+            {
+                Name="Employee",
+                Value=selectedEmployeeId.ToString()
+            },
+            new FilterDTO
+            {
+                Name="EquipmentType",
+                Value=equipmentType.ToString()
+            },
+            new FilterDTO
+            {
+                Name="Department",
+                Value = searchDeparatment
+            }
+        };
+        await EquipmentAssignementService.Filter(filterRequest);
+        getEquipmentAssignementDTOs = EquipmentAssignementService.EquipmentAssignements;
+        StateHasChanged();
+    }
+}

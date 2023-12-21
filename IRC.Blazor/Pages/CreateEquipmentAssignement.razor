@@ -1,0 +1,93 @@
+﻿@page "/EquipmentAssignement/{id:int}"
+@using IRC.DTOs.Employee
+@using IRC.DTOs.EquipmentAssaignement
+@using IRC.DTOs.Room
+@using IRC.Models
+@inject IEquipmentService EquipmentService
+@inject IEquipmentAssignementService EquipmentAssignementService
+
+<PageTitle>Borrow Equipment</PageTitle>
+<h2>Borrow Equipment</h2>
+
+<EditForm Model="equipment" OnSubmit="HandleSubmitEA">
+    <div>
+        <label for="name">Name</label>
+        <InputText id="name" @bind-Value="equipment.Name" class="form-control" disabled></InputText>
+    </div>
+    <div>
+        <label for="serialnumber">Serial Number</label>
+        <InputText id="serialnumber" @bind-Value="equipment.SerialNumber" class="form-control" disabled></InputText>
+    </div>
+    <div>
+        <label for="inventorynumber">Inventory Number</label>
+        <InputText id="inventorynumber" @bind-Value="equipment.InventoryNumber" class="form-control" disabled></InputText>
+    </div>
+    <div>
+        <label for="quantity">Quantity</label>
+        <InputNumber id="quantity" @bind-Value="equipment.Quantity" class="form-control" disabled></InputNumber>
+    </div>
+    <div>
+        <label for="type">Type</label>
+        <InputSelect id="type" @bind-Value="equipment.Type" class="form-select" disabled>
+            @foreach (var value in Enum.GetValues(typeof(EquipmentType)))
+            {
+                <option value="@value" selected="@((EquipmentType)value == equipment.Type)">
+                    @value.ToString()
+                </option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label>Employee</label><br />
+        <InputSelect @bind-Value="createEquipmentAssignement.EmployeeId" class="form-select">
+            <option value="">Select an Employee</option>
+            @foreach (var eas in EquipmentAssignementService.Employees)
+            {
+                <option value="@eas.EmployeeId">@eas.Name</option>
+            }
+        </InputSelect>
+    </div>
+    <div>
+        <label>Room</label><br />
+        <InputSelect @bind-Value="createEquipmentAssignement.RoomId" class="form-select">
+            <option value="">Select a Room</option>
+            @foreach (var eas in EquipmentAssignementService.Rooms)
+            {
+                <option value="@eas.RoomId">@eas.RoomNumber</option>
+            }
+        </InputSelect>
+
+    </div>
+    <div>
+        <label for="datepicker">Date Borrowed:</label><br />
+        <InputDate id="datepicker" @bind-Value="createEquipmentAssignement.DateBorrowed" class="form-control"></InputDate>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Borrow</button>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    GetEquipmentDTO equipment = new GetEquipmentDTO();
+    CreateEquipmentAssignementDTO createEquipmentAssignement = new CreateEquipmentAssignementDTO();
+    GetEmployeeDTO getEmployee = new GetEmployeeDTO();
+    GetRoomDTO getRoom = new GetRoomDTO();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        equipment = await EquipmentService.GetEquipment((int)Id);
+        await EquipmentAssignementService.GetEmployee(); 
+        await EquipmentAssignementService.GetRooms(); 
+    }
+
+    async Task HandleSubmitEA()
+    {
+        createEquipmentAssignement.EquipmentId = Id;
+        createEquipmentAssignement.DateBorrowed = createEquipmentAssignement.DateBorrowed;
+        await EquipmentAssignementService.CreateEquipmentAssignement(createEquipmentAssignement);
+    }
+}

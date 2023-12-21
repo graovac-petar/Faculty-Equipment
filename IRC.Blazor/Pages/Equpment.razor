@@ -11,6 +11,7 @@
 }
 else
 {
+    
     <table class="table">
         <thead>
             <tr>
@@ -33,6 +34,9 @@ else
                     <td>
                         <button class="btn btn-primary" @onclick="(() => ShowEquipment(equipment.EquipmentId))"><i class="oi oi-pencil">Edit</i></button>
                     </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="(() => ShowEquipmentAssignement(equipment.EquipmentId))"><i class="oi oi-pencil">Borrow</i></button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -54,5 +58,9 @@ else
     void CreateNewEquipment()
     {
         NavigationManager.NavigateTo("Equipment");
+    }
+    void ShowEquipmentAssignement(int? Id)
+    {
+        NavigationManager.NavigateTo($"EquipmentAssignement/{Id}");
     }
 }

@@ -15,9 +15,9 @@ builder.Services.AddTransient<DBContext>();
 
 builder.Services.AddScoped<IEmployeeEFC, EmployeeEFC>();
 builder.Services.AddScoped<IEquipmentEFC, EquipmentEFC>();
-builder.Services.AddScoped<EmployeeEFC>();
-builder.Services.AddScoped<EquipmentEFC>();
-builder.Services.AddScoped<RoomEFC>();
+builder.Services.AddScoped<IEmployeeEFC, EmployeeEFC>();
+builder.Services.AddScoped<IEquipmentEFC, EquipmentEFC>();
+builder.Services.AddScoped<IRoomEFC, RoomEFC>();
 builder.Services.AddScoped<EquipmentAssignementEFC>();
 
 builder.Services.AddValidatorsFromAssembly(typeof(EmployeeValidator).Assembly);
