@@ -21,25 +21,47 @@ namespace IRC.Blazor.Services
 
         public async Task CreateEquipment(CreateEquipmentDTO createEquipmentDTO)
         {
-            var result = await _httpClient.PostAsJsonAsync("Equipment", createEquipmentDTO);
-            //var response = await result.Content.ReadFromJsonAsync<List<GetEquipmentDTO>>();
-            await Task.Delay(700);
-            navigationManager.NavigateTo("Equipment/all");
-
+            try
+            {
+                var result = await _httpClient.PostAsJsonAsync("Equipment", createEquipmentDTO);
+                result.EnsureSuccessStatusCode();
+                await Task.Delay(700);
+                navigationManager.NavigateTo("Equipment/all");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException("Failed to create equipment. Please try again later.", ex);
+            }
         }
 
         public async Task DeleteEquipment(int id)
         {
-            var result = await _httpClient.DeleteAsync($"Equipment/{id}");
-            navigationManager.NavigateTo("Equipment/all");
+            try
+            {
+                var result = await _httpClient.DeleteAsync($"Equipment/{id}");
+                result.EnsureSuccessStatusCode();
+                navigationManager.NavigateTo("Equipment/all");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException("Error deleting equipment.", ex);
+            }
         }
 
         public async Task<GetEquipmentDTO> GetEquipment(int id)
         {
-            var result = await _httpClient.GetFromJsonAsync<GetEquipmentDTO>($"Equipment/{id}");
-            if (result != null)
-                return result;
-            throw new Exception();
+            try
+            {
+                var result = await _httpClient.GetFromJsonAsync<GetEquipmentDTO>($"Equipment/{id}");
+                if (result != null)
+                    return result;
+                else
+                    throw new InvalidOperationException("Equipment not found.");
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException("Failed to fetch equipment. Please try again later.", ex);
+            }
         }
         public async Task<EquipmentF> GetEquipmentF(int id)
         {
@@ -56,23 +78,44 @@ namespace IRC.Blazor.Services
             }
 
 
-            throw new Exception();
+            throw new Exception("Failed to fetch equipment. Please try again later.");
         }
 
         public async Task GetEquipments()
         {
-            var result = await _httpClient.GetFromJsonAsync<List<GetEquipmentDTO>>("Equipment/all");
-            if (result != null)
+            try
             {
-                Equipments = result;
+                var result = await _httpClient.GetFromJsonAsync<List<GetEquipmentDTO>>("Equipment/all");
+                if (result != null)
+                {
+                    Equipments = result;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new InvalidOperationException("Error fetching equipment list.", ex);
             }
         }
 
         public async Task UpdateEquipment(UpdateEquipmentDTO updateEquipmentDTO, int id)
         {
-            var result = await _httpClient.PutAsJsonAsync($"Equipment/{id}", updateEquipmentDTO);
-            await Task.Delay(700);
-            navigationManager.NavigateTo("Equipment/all");
+            try
+            {
+                var result = await _httpClient.PutAsJsonAsync($"Equipment/{id}", updateEquipmentDTO);
+                result.EnsureSuccessStatusCode(); // Ensure a successful HTTP status code (200-299)
+                await Task.Delay(700);
+                navigationManager.NavigateTo("Equipment/all");
+            }
+            catch (HttpRequestException ex)
+            {
+                HandleHttpRequestException("Error updating equipment.", ex);
+            }
+        }
+        private void HandleHttpRequestException(string errorMessage, HttpRequestException ex)
+        {
+            // Log or handle the exception
+            // For example: _logger.LogError(ex, "{ErrorMessage}: {ExceptionMessage}", errorMessage, ex.Message);
+            throw new InvalidOperationException($"{errorMessage} Please try again later.", ex);
         }
     }
 }

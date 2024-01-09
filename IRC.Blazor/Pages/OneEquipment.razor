@@ -1,9 +1,12 @@
 ﻿@page "/Equipment"
 @page "/Equipment/{id:int}"
+@using IRC.Blazor.Components
 @using IRC.Blazor.ModelValidator
 @using IRC.Models
 @using Blazored.FluentValidation
+@using MudBlazor
 @inject IEquipmentService EquipmentService
+@inject IDialogService DialogService
 
 @if (Id == null)
 {
@@ -17,7 +20,6 @@ else
 }
 <EditForm Model="@equipment" OnValidSubmit="@SubmitValidForm">
     <FluentValidationValidator/>
-    <ValidationSummary/>
     <div>
         <label for="name">Name</label>
         <InputText id="name" @bind-Value="@equipment.Name" class="form-control"></InputText>
@@ -52,7 +54,11 @@ else
 
     <br />
     <button type="submit" class="btn btn-primary">@btnText</button>
-    <button type="button" class="btn btn-danger" @onclick="DeleteEquipment">Delete Equipment</button>
+    @if (Id != null)
+    {
+        <button type="button" class="btn btn-danger" @onclick="DeleteEquipment">Delete Equipment</button>
+    }
+    
     <br />
     <Label>@message</Label>
 </EditForm>
@@ -111,6 +117,12 @@ else
     }
     async Task DeleteEquipment()
     {
-        await EquipmentService.DeleteEquipment((int) Id);
+        //var options = new DialogOptions { CloseOnEscapeKey = true };
+        //var parameters = new DialogParameters();
+        //parameters.Add("equipment", equipment);
+        //parameters.Add("Id", Id);
+        //DialogService.Show<DeleteEquipmentDialog>("Delete Equipment", parameters, options);
+        await EquipmentService.DeleteEquipment((int)Id);
+        
     }
 }

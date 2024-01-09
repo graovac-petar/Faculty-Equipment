@@ -8,8 +8,8 @@
 @inject IEquipmentAssignementService EquipmentAssignementService
 @inject NavigationManager NavigationManager
 
-<PageTitle>EquipmentAssignement</PageTitle>
-<h2>Equipment Assignement</h2>
+<PageTitle>All Equipment Assignements</PageTitle>
+<h2>All Equipment Assignements</h2>
 
 @if (getEquipmentAssignementDTOs == null)
 {
@@ -59,6 +59,7 @@ else
                 <th>Equipment Name</th>
                 <th>Employee Name</th>
                 <th>Room Number</th>
+                <th>Date Borrowed</th>
             </tr>
         </thead>
         <tbody>
@@ -68,6 +69,17 @@ else
                     <td>@equipmentAssignement.Equipment.Name</td>
                     <td>@equipmentAssignement.Employee.Name</td>
                     <td>@equipmentAssignement.Room.RoomNumber</td>
+                    <td>
+                        @if (equipmentAssignement.DateBorrowed.HasValue)
+                        {
+                            @equipmentAssignement.DateBorrowed.Value.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            // Handle null values accordingly
+                            <span>No date available</span>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

@@ -3,13 +3,16 @@
 @using IRC.DTOs.EquipmentAssaignement
 @using IRC.DTOs.Room
 @using IRC.Models
+@using Blazored.FluentValidation
 @inject IEquipmentService EquipmentService
 @inject IEquipmentAssignementService EquipmentAssignementService
+@inject NavigationManager NavigationManager
 
 <PageTitle>Borrow Equipment</PageTitle>
 <h2>Borrow Equipment</h2>
 
-<EditForm Model="equipment" OnSubmit="HandleSubmitEA">
+<EditForm Model="@equipmentAssignement" OnValidSubmit="@HandleSubmitEA">
+    <FluentValidationValidator></FluentValidationValidator>
     <div>
         <label for="name">Name</label>
         <InputText id="name" @bind-Value="equipment.Name" class="form-control" disabled></InputText>
@@ -39,33 +42,56 @@
     </div>
     <div>
         <label>Employee</label><br />
-        <InputSelect @bind-Value="createEquipmentAssignement.EmployeeId" class="form-select">
-            <option value="">Select an Employee</option>
+        <InputSelect @bind-Value="@equipmentAssignement.EmployeeId" class="form-select">
             @foreach (var eas in EquipmentAssignementService.Employees)
             {
                 <option value="@eas.EmployeeId">@eas.Name</option>
             }
         </InputSelect>
+        <ValidationMessage For="@(()=>equipmentAssignement.EmployeeId)"></ValidationMessage>
     </div>
     <div>
         <label>Room</label><br />
-        <InputSelect @bind-Value="createEquipmentAssignement.RoomId" class="form-select">
-            <option value="">Select a Room</option>
+        <InputSelect @bind-Value="@equipmentAssignement.RoomId" class="form-select">
             @foreach (var eas in EquipmentAssignementService.Rooms)
             {
                 <option value="@eas.RoomId">@eas.RoomNumber</option>
             }
         </InputSelect>
+        <ValidationMessage For="@(()=>equipmentAssignement.RoomId)"></ValidationMessage>
 
     </div>
     <div>
         <label for="datepicker">Date Borrowed:</label><br />
-        <InputDate id="datepicker" @bind-Value="createEquipmentAssignement.DateBorrowed" class="form-control"></InputDate>
+        <InputDate id="datepicker" @bind-Value="@equipmentAssignement.DateBorrowed" class="@dateInputClass"></InputDate>
+        <ValidationMessage For="@(()=>equipmentAssignement.DateBorrowed)"></ValidationMessage>
     </div>
 
     <br />
     <button type="submit" class="btn btn-primary">Borrow</button>
 
+    @if (showModal)
+    {
+        <div class="modal fade show" tabindex="-1" style="display: block;" id="exampleModal" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Equipment is already borrowed</h5>
+                        <button type="button" class="btn-close" @onclick="CloseModal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @onclick="CloseModal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+
+    }
+   
 </EditForm>
 
 @code {
@@ -73,10 +99,13 @@
     public int? Id { get; set; }
 
     GetEquipmentDTO equipment = new GetEquipmentDTO();
+    EquipmentAssignementF equipmentAssignement = new EquipmentAssignementF();
     CreateEquipmentAssignementDTO createEquipmentAssignement = new CreateEquipmentAssignementDTO();
     GetEmployeeDTO getEmployee = new GetEmployeeDTO();
     GetRoomDTO getRoom = new GetRoomDTO();
 
+    bool showModal = false;
+    string dateInputClass = "form-control";
     protected override async Task OnParametersSetAsync()
     {
         equipment = await EquipmentService.GetEquipment((int)Id);
@@ -87,7 +116,22 @@
     async Task HandleSubmitEA()
     {
         createEquipmentAssignement.EquipmentId = Id;
-        createEquipmentAssignement.DateBorrowed = createEquipmentAssignement.DateBorrowed;
-        await EquipmentAssignementService.CreateEquipmentAssignement(createEquipmentAssignement);
+        createEquipmentAssignement.DateBorrowed = equipmentAssignement.DateBorrowed;
+        createEquipmentAssignement.EmployeeId = equipmentAssignement.EmployeeId;
+        createEquipmentAssignement.RoomId = equipmentAssignement.RoomId;
+        
+        var result = await EquipmentAssignementService.CreateEquipmentAssignement(createEquipmentAssignement);
+        if (result == false)
+        {
+            showModal = true;
+            
+        }
+        
     }
+    void CloseModal()
+    {
+        showModal = false;
+        NavigationManager.NavigateTo("Equipment/all");
+    }
+
 }

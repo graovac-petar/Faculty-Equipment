@@ -22,10 +22,20 @@ namespace IRC.Blazor.Services
         public List<GetEmployeeDTO> Employees { get; set; } = new List<GetEmployeeDTO>();
 
 
-        public async Task CreateEquipmentAssignement(CreateEquipmentAssignementDTO createEquipmentAssignement)
+        public async Task<bool> CreateEquipmentAssignement(CreateEquipmentAssignementDTO createEquipmentAssignement)
         {
+
             var result = await _http.PostAsJsonAsync("/EquipmentAssignement", createEquipmentAssignement);
-            NavigationManager.NavigateTo("Equipment/all");
+            if (result.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo("Equipment/all");
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
         }
 
         public async Task GetEmployee()
@@ -33,12 +43,22 @@ namespace IRC.Blazor.Services
             var result = await _http.GetFromJsonAsync<List<GetEmployeeDTO>>("/Employee");
             if (result != null)
                 Employees = result;
+            else
+            {
+                throw new Exception("Cant load all employees");
+            }
         }
         public async Task GetRooms()
         {
             var result = await _http.GetFromJsonAsync<List<GetRoomDTO>>("/Room");
             if (result != null)
                 Rooms = result;
+            else
+            {
+                throw new Exception("Cant load all rooms");
+            }
+
+
         }
 
         public async Task GetEquipmentAssignements()
@@ -46,13 +66,24 @@ namespace IRC.Blazor.Services
             var result = await _http.GetFromJsonAsync<List<GetEquipmentAssignementDTO>>("/EquipmentAssignement");
             if (result != null)
                 EquipmentAssignements = result;
+            else
+            {
+                throw new Exception("Cant load all equipment Assignements");
+            }
         }
 
         public async Task Filter(FilterRequestDTO filterRequest)
         {
             var result = await _http.PostAsJsonAsync("/EquipmentAssignement/search", filterRequest);
             if (result.IsSuccessStatusCode)
+            {
+                //EquipmentAssignements = null;
                 EquipmentAssignements = await result.Content.ReadFromJsonAsync<List<GetEquipmentAssignementDTO>>();
+            }
+            else
+            {
+                throw new Exception("Cant load all filters");
+            }
         }
     }
 }

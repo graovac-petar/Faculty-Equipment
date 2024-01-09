@@ -1,0 +1,31 @@
+﻿@using MudBlazor
+@inject IEquipmentService EquipmentService
+<MudDialog>
+    <DialogContent>
+        @if(equipment == null)
+        {
+            <p>Loading... </p>
+        }
+        else
+        {
+            <MudText>You are about to delete '@equipment.Name'. Are you sure?</MudText>
+        }
+    </DialogContent>
+    <DialogContent>
+        <MudButton OnClick="Cancel">No</MudButton>
+        <MudButton OnClick="Submit">Yes</MudButton>
+    </DialogContent>
+</MudDialog>
+
+
+@code {
+    [CascadingParameter] MudDialogInstance? MudDialog { get; set; }
+    [Parameter] public EquipmentF equipment { get; set; }
+    [Parameter] public int Id { get; set; }
+
+    async void Submit()
+    {
+        //await EquipmentService.DeleteEquipment((int)Id);
+    }
+    void Cancel() => MudDialog?.Close(DialogResult.Ok(false));
+}

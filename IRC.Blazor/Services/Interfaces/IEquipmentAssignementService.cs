@@ -12,7 +12,7 @@ namespace IRC.Blazor.Services.Interfaces
         List<GetEmployeeDTO> Employees { get; set; }
         Task GetEmployee();
         Task GetRooms();
-        Task CreateEquipmentAssignement(CreateEquipmentAssignementDTO createEquipmentAssignement);
+        Task<bool> CreateEquipmentAssignement(CreateEquipmentAssignementDTO createEquipmentAssignement);
         Task GetEquipmentAssignements();
         Task Filter(FilterRequestDTO filterRequest);
 
