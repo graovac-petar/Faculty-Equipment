@@ -13,6 +13,8 @@ Faculty Equipment is a web application designed to streamline the process of bor
 - **Manage Rooms**: Create, update, delete, and view rooms.
 - **Manage Employees**: Create, update, delete, and view employee records.
 - **Manage Equipment**: Create, update, delete, and view equipment details.
+- **Filter Equipment**
+- **Sort Equipment**
 
 ## Future Plans
 The project plans to include additional features such as:
