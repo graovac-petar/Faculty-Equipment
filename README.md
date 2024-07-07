@@ -18,7 +18,3 @@ Faculty Equipment is a web application designed to streamline the process of bor
 The project plans to include additional features such as:
 - **Department Management**: Integrate department-specific management and operations.
 - **Statistics**: Implement statistics for tracking and analyzing the usage of equipment across various parts of the application.
-
-## Installation
-To set up the project locally, follow these steps:
-1. Clone the repository:
